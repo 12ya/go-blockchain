@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -44,4 +45,23 @@ func (bc *Blockchain) AddBlock(data string) {
 	bc.blocks = append(bc.blocks, newBlock)
 }
 
-func main() {}
+func NewBlockchain() *Blockchain {
+	return &Blockchain{[]*Block{NewGenesisBlock()}}
+}
+
+func NewGenesisBlock() *Block {
+	return NewBlock("Genesis Block", []byte{})
+}
+
+func main() {
+	blockchain := NewBlockchain()
+
+	blockchain.AddBlock("Send 1 BTC to Vlad")
+	blockchain.AddBlock("Send 32 BTC to Connor")
+
+	for _, block := range blockchain.blocks {
+		fmt.Printf("Previous hash : %x\n", block.PrevBlockHash)
+		fmt.Printf("Data : %s\n", block.Data)
+		fmt.Printf("Hash : %x\n", block.Hash)
+	}
+}
